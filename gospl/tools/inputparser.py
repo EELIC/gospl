@@ -557,10 +557,15 @@ class ReadYaml(object):
                 # initial soil thickness
                 self.cstSoilH = 1.0
             try:
-                soilfile = soilDict["map"]
+                soilfile = soilDict["soilMap"]
             except KeyError:
                 soilfile = None
                 self.soilFile = None
+            try:
+                tempfile = soilDict["tempMap"]
+            except KeyError:
+                tempfile = None
+                self.tempFile = None
 
             if soilfile is not None:
                 self.soilFile = soilfile[0] + ".npz"
@@ -571,6 +576,26 @@ class ReadYaml(object):
                 except IOError:
                     print("Unable to open numpy dataset: {}".format(self.soilFile), flush=True)
                     raise IOError("The numpy dataset is not found...")
+            
+            if tempfile is not None:
+                self.tempFile = tempfile[0] + ".npz"
+                self.tempData = tempfile[1]
+                try:
+                    with open(self.tempFile) as tinfo:
+                        tinfo.close()
+                except IOError:
+                    print("Unable to open numpy dataset: {}".format(self.tempFile), flush=True)
+                    raise IOError("The numpy dataset is not found...")
+            try:
+                self.energyAct = soilDict["activation"]
+            except KeyError:
+                # Activation energy (J/mol) 
+                self.energyAct = 40.e3
+            try:
+                self.tempRef = soilDict["tempRef"]
+            except KeyError:
+                # Reference temperature in Celsius
+                self.tempRef = 15.0
 
         except KeyError:
             self.cptSoil = False
@@ -583,6 +608,10 @@ class ReadYaml(object):
             self.cstSoilH = 0.0
             self.soilFile = None
             self.soilData = None
+            self.energyAct = 0.0
+            self.tempRef = 15.0
+            self.tempFile = None
+            self.tempData = None
 
         return
 
