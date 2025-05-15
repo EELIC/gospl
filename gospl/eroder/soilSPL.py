@@ -58,31 +58,13 @@ class soilSPL(object):
 
         # If temperatures dataset is provided then compute the corresponding soil production rate
         if self.tempFile is not None:
+            Tref = self.tempRef + 273.15
             loadData = np.load(self.tempFile)
             T = loadData[self.tempData] + 273.15 # Conversion to Kelvin
-
-            # Define temperature limits for regularization
-            T_min = 273.15  # 0°C in Kelvin
-            T_max = 323.15  # 50°C in Kelvin
-
-            # Apply temperature clamping using limits for regularization
-            T_eff = np.clip(T, T_min, T_max)
-
-            # Apply smoother transition using a sigmoid for temperatures approaching extremes
-            sigmoid1 = 1 / (1 + np.exp(-0.1 * (T_eff - T_min)))
-            sigmoid2 = 1 / (1 + np.exp(-0.1 * (T_max - T_eff)))
-            transition_factor = sigmoid1 * sigmoid2
-
             # Compute Arrhenius term, including Ea / R T0 term
             R = 8.314  # Gas constant (J/mol/K)
-            log_P = np.log(self.P0) - self.energyAct / (R * T_eff) + self.energyAct / (R * self.tempRef)
-
-            # Convert back to normal space and cap max value
-            P = np.exp(log_P)
-            
-            # Apply transition factor and cap max production rate
-            P = np.minimum(P * transition_factor, 2.0*self.P0)
-            self.prodSoil = P[self.locIDs]
+            Arr_terms = self.energyAct * (1./Tref - 1./T) / R
+            self.prodSoil = self.P0 * np.exp(Arr_terms)
         else:
             self.prodSoil = self.P0 * np.ones(len(self.locIDs))
 
