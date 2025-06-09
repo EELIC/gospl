@@ -1,6 +1,21 @@
 
 # WIN10 WSL2 Ubuntu 24.04.2 LTS 安装命令:
 
+## 下载 Miniforge 安装脚本
+```
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+
+bash Miniforge3-Linux-x86_64.sh
+
+conda config --set auto_activate_base false
+```
+
+
+## 下载gospl 源码
+```
+git clone https://github.com/EELIC/gospl.git
+```
+
 ## 列出虚拟环境
 ```
 conda env list
@@ -18,8 +33,6 @@ conda install jupyter
 
 ```
 
-
-
 ## 安装失败->删除已安装gospl1环境
 ```
 cd ~
@@ -31,7 +44,7 @@ conda remove -n gospl --all
 
 ## 运行 goSPL-examples
 ```
-conda activate gospl1 
+conda activate gospl
 jupyter --version
 
 ```

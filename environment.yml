@@ -27,4 +27,4 @@ dependencies:
   - pip
   - pip:
     - git+https://github.com/Geodels/isoFlex.git
-    - git+https://github.com/Geodels/gospl.git
+    - git+https://github.com/EELIC/gospl.git
