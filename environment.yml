@@ -8,7 +8,7 @@ dependencies:
   - setuptools>=61.0
   - pkg-config
   - build
-  - numpy
+  - numpy=1.23.5 
   - petsc4py
   - scipy
   - numpy-indexed
