@@ -24,6 +24,7 @@ dependencies:
   - pyproj
   - cython
   - compilers
+  - pip
   - pip:
     - git+https://github.com/Geodels/isoFlex.git
     - git+https://github.com/Geodels/gospl.git
