@@ -16,6 +16,25 @@ conda config --set auto_activate_base false
 git clone https://github.com/EELIC/gospl.git
 ```
 
+安装修改记录 因为 numpy version numpy=1.23.5
+environment.yml 修改内容
+
+```
+dependencies:
+- numpy=1.23.5 
+- pip:
+    - git+https://github.com/EELIC/gospl.git
+```
+
+pyproject.toml 修改内容
+
+```
+dependencies = [
+    "numpy==1.23.5",
+]
+```
+
+
 ## 列出虚拟环境
 ```
 conda env list
@@ -33,7 +52,7 @@ conda install jupyter
 
 ```
 
-## 安装失败->删除已安装gospl1环境
+## 安装失败->删除已安装gospl环境
 ```
 cd ~
 conda remove -n gospl --all
@@ -45,10 +64,31 @@ conda remove -n gospl --all
 ## 运行 goSPL-examples
 ```
 conda activate gospl
-jupyter --version
-
 ```
 
+## 安装中文语言包
+```
+pip install jupyterlab-language-pack-zh-CN
+```
+## jupyter查看和清理现有内核
+```
+# 查看现有内核
+jupyter kernelspec list
+# 删除多余内核	
+jupyter kernelspec remove gospl1
+操作	命令或操作
+
+# 注册 gospl 为 Jupyter 内核	
+
+conda activate gospl
+which python
+python -m ipykernel install --user --name gospl --display-name "Python (gospl)"
+```
+
+## jupyter查看版本
+```
+jupyter --version
+```
 回应输出:
 ```
 Selected Jupyter core packages...
@@ -66,6 +106,28 @@ notebook         : 7.4.3
 qtconsole        : not installed
 traitlets        : 5.14.3
 ```
+
+
+## 在 Jupyter Notebook 中验证解释器路径
+在笔记本第一个单元格中运行：
+```
+python
+ 
+import sys
+print(sys.executable)
+# 你应该看到这个路径：
+
+
+/home/eason/miniforge3/envs/gospl/bin/python
+```
+
+
+## 确认 numpy 的版本
+
+```
+python -c "import numpy; print('NumPy:', numpy.__version__); print('numpy OK')"
+```
+
 ## 在当前文件夹启动 Jupyter Notebook
 ```
 cd ~/goSPL-examples/Local-examples/stratigraphic_record
@@ -84,7 +146,12 @@ http://localhost:8888/tree?token=504197a5aa32aca8b78794e66f6d8c2c1d1fdea8dad8d55
 conda install numpy=1.23.5
 ```
 
-
+## 示例运行 
+清理旧的 Python 缓存（重要）
+```
+find . -name "*.pyc" -delete
+find . -name "__pycache__" -type d -exec rm -r {} +
+```
 # gospl使用指南
 https://gospl.readthedocs.io/en/stable/index.html 
 

@@ -1,0 +1,35 @@
+time:
+  start: 0
+  end: 500000
+  dt: 1000
+
+domain:
+  npdata: [domain, nodes, triangles, elevation]      # 👈 这里是关键，指定 domain.npz 的“前缀”名（不含扩展名）
+  file: domain.npz
+  coords: nodes
+  connect: triangles # ✅ 添加这行，避免默认找 'c'
+  active: active
+
+boundary:
+  type: closed
+
+processes:
+  uplift:
+    file: uplift.nc
+  erosion:
+    fluvial:
+      k: 1e-6
+      m: 0.5
+      n: 1.0
+    hillslope:
+      D: 0.01
+  sediment:
+    diffusion: true
+    grain_size: [0.05, 1.0]
+
+initial_conditions:
+  topography: topo_initial.nc
+
+output:
+  folder: outputs/
+  save_every: 10000
